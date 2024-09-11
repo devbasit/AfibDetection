@@ -6,14 +6,10 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 import pandas as pd 
 from matplotlib import pyplot as plt
-import plotly.express as px
-import plotly.io as pio
 import numpy as np 
 import joblib
-import seaborn as sns
 from scipy.io import loadmat
 from biosppy.signals import ecg
-import wfdb
 from scipy import stats
 from collections import Counter
 
@@ -30,8 +26,6 @@ AfibOthers  = joblib.load('AFOTHERS_DEPLOY.joblib')
 signals = {"AFIB DATA":sigAfib,"NSR Data":sigNoSR, "OTHERS":sigArrh}
 extractedFeatures = []
 window_size = 10
-
-pio.templates.default = 'plotly'
 
 # plt.style.use("ggplot")
 plt.axis('off')
