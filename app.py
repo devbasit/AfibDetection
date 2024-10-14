@@ -180,18 +180,20 @@ if nav == "Home":
 
 
 if nav == 'Data Exploration':
-    dataToExplore  = st.radio("Data to Explore",["AFIB DATA","NSR Data", "OTHERS"])
-    signal = signals[dataToExplore]
-    displaySignal(signal, col2)
+    dataType = st.radio('UPLOAD DATA OR USE INTERNAL DATA',['upload', 'internal'], horizontal = True)
+    if dataType == 'internal':dataToExplore  = st.radio("Data to Explore",["AFIB DATA","NSR Data", "OTHERS"]); signal = signals[dataToExplore]; displaySignal(signal, col2)
+    else:
+        dat  = st.file_uploader("Upload your ECG data data from sensor. CSV or TXT file must contain only 'ECG' column", type=['csv', 'txt'])
+        if dat is not None: col2.write('PARSING DATA'); signal = pd.read_csv(dat)['ECG'].values.flatten(); displaySignal(signal, col2)
     
 if nav == "Prediction":
     st.header("PREDICT ECG CLASS")
     predType = st.radio("Select Prediction Type",["Upload Data","Predict Single"], horizontal = True)
     if predType == 'Upload Data':
-        dat  = st.file_uploader("Upload your ECG data data. Supported formats are .csv, .txt, .mat, .ecg", type=['csv','txt','mat', '.npy'])
+        dat  = st.file_uploader("Upload your ECG data data. Supported formats are .csv, .txt, .mat, .ecg. CSV or TXT file must contain only 'ECG' column", type=['csv','txt','mat', '.npy'])
         if dat is not None:
             col2.write('PARSING DATA')
-            if dat.name.endswith('.csv') or dat.name.endswith('.txt'): loadedData = pd.read_csv(dat).values.flatten()
+            if dat.name.endswith('.csv') or dat.name.endswith('.txt'): loadedData = pd.read_csv(dat)['ECG'].values.flatten()
             elif dat.name.endswith('.mat'): loadedData = loadmat(dat).flatten()
             elif dat.name.endswith('.npy'): loadedData = np.load(dat, allow_pickle = True).flatten()
 
